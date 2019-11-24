@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Credit/Debit/Charge Cards</h1>
+      <p class="lead text-muted">Welcome to your Credit/Debit/Charge Card vault. Add a new credit, debit, charge or other miscellaneous card using the "Add New" button or access an existing card below. </p>
+      <p>
+        <form action="/cards" method="post">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="cardname" placeholder="Card Name" type="text">
+            </div>
+            <button class="btn btn-primary" type="submit">Add New</button>
+        </form>
+      </p>
+    </div>
+  </section>
+
+
+
+  <section class="jumbotron text-center">
+
+<div class="container">
+
+ <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row">
+       {% for card in cards %}
+        <script>
+          function showCardnumber{{ card['cardid'] }}() {
+            var x = document.getElementById("cardnumber{{ card['cardid'] }}");
+            if (x.type === "password") {
+              x.type = "text";
+            } else {
+              x.type = "password";
+            }
+          }
+
+          function showCvv{{ card['cardid'] }}() {
+            var y = document.getElementById("cvv{{ card['cardid'] }}");
+            if (y.type === "password") {
+              y.type = "text";
+            } else {
+              y.type = "password";
+            }
+          }
+          </script>
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm" style="float: center; margin: 10px auto;">
+            <img src="/static/creditcard.svg" width="50%" height="100%" style="float: center; margin: 20px auto;">
+            <div class="card-body">
+              <p class="card-text" style="float: center; margin: 10px auto;">{{ card['cardname'] }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group" style="float: none; margin: 0 auto;">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#MyModal{{ card['cardid'] }}" data-backdrop="true">Edit</button>
+                    <!-- Modal -->
+                      <div class="modal fade" id="MyModal{{ card['cardid'] }}" role="dialog">
+                        <div class="modal-dialog">
+                        <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">{{ card['cardname'] }}</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body" align="left">
+                              <form action="/cards" method="post">
+                                  <div class="form-group">
+                                      <label>Card Name </label>
+                                      <input autocomplete="off" class="form-control" name="cardname" placeholder="Card Name" value="{{ card['cardname'] }}" type="text">
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Card Type </label>
+                                    <select name="cardtypeid">
+                                      {% for cardtype in cardtypes %}
+                                        <option value='{{ cardtype['cardtypeid'] }}' {% if card['cardtypeid'] == cardtype['cardtypeid'] %} selected {% endif %}> {{ cardtype['cardtype'] }}</option>
+                                      {% endfor %}
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Cardholder Name </label>
+                                    <input autocomplete="on" autofocus class="form-control" name="cardholder" placeholder="John Doe" value="{{ card['cardholder'] }}" type="text">
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Cardnumber </label>
+                                    <input autocomplete="off" class="form-control" id="cardnumber{{ card['cardid'] }}" name="cardnumber" placeholder="Card Number" value="{{ card['cardnumber'] }}" type="password">
+                                    <input type="checkbox" onclick="showCardnumber{{ card['cardid'] }}()">Show Card Number
+                                  </div>
+                                  <div class="form-group">
+                                      <label>Expiration Date </label>
+                                      <input autocomplete="off" class="form-control" name="expire_date" placeholder="Expiration Date" value="{{ card['expire_date'] }}" type="month">
+                                  </div>
+                                  <div class="form-group">
+                                      <label>CVV </label>
+                                      <input autocomplete="off" class="form-control" id = "cvv{{ card['cardid'] }}" name="cvv" placeholder="CVV" value="{{ card['cvv'] }}" type="password">
+                                      <input type="checkbox" onclick="showCvv{{ card['cardid'] }}()">Show CVV
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Comment </label><br>
+                                    <textarea class="form-control" name="comment" placeholder="Comment" value="{{ card['comment'] }}" rows="5" cols="35">{{ card['comment'] }}</textarea>
+                                  </div>
+                                  <button class="btn btn-primary" type="submit" name="cardid" value="{{ card['cardid'] }}">Save Changes</button>
+                                  <input type="button" class="btn btn-primary" value="Cancel" data-dismiss="modal"/>
+                              </form>
+                              <br><hr color="red">
+                              <form action="/delete" method="post">
+                                <div class="form-group">
+                                  <label bold>Use the button below to delete this entry:</label>
+                                  <br>
+                                  <button align="center" class="btn btn-danger" type="submit" name="deletecard" value="{{ card['cardid'] }}">Delete entry</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+              </div>
+
+            </div>
+        </div>
+
+        </div>
+
+      {% endfor %}
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/chanut" title="Chanut">Chanut</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+{% endblock %}

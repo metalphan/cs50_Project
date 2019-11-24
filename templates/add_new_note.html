@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+
+    <form action="/addnewnote" method="post">
+        <div class="form-group">
+            <input autocomplete="off" class="form-control" name="notename" placeholder="Note Title" value="{{ notename }}" type="text">
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" name="note" placeholder="Note Text" rows="5" cols="50"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Save New</button>
+        <input type="button" class="btn btn-primary" value="Cancel" onclick="history.back()"/>
+    </form>
+{% endblock %}

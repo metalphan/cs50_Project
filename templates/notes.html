@@ -1,0 +1,94 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+  <section class="jumbotron text-center">
+    <div class="container">
+      <h1 class="jumbotron-heading">Secure Notes</h1>
+      <p class="lead text-muted">Welcome to your secure Note vault. Add a new secure Note using the Add New button or access an existing note below. </p>
+      <p>
+        <form action="/notes" method="post">
+            <div class="form-group">
+                <input autocomplete="off" autofocus class="form-control" name="notename" placeholder="Note Title" type="text">
+            </div>
+            <button class="btn btn-primary" type="submit">Add New</button>
+        </form>
+      </p>
+    </div>
+  </section>
+
+
+
+  <section class="jumbotron text-center">
+
+<div class="container">
+
+ <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row">
+        {% for note in notes %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm" style="float: center; margin: 10px auto;">
+            <img src="/static/note.svg" width="50%" height="100%" style="float: center; margin: 20px auto;">
+            <div class="card-body">
+              <p class="card-text" style="float: center; margin: 10px auto;">{{ note['notename'] }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group" style="float: none; margin: 0 auto;">
+                  <button type="button" class="btn btn-sm btn-outline-secondary" data-toggle="modal" data-target="#MyModal{{ note['noteid'] }}" data-backdrop="true">Edit</button>
+                    <!-- Modal -->
+                      <div class="modal fade" id="MyModal{{ note['noteid'] }}" role="dialog">
+                        <div class="modal-dialog">
+                        <!-- Modal content-->
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 class="modal-title">{{ note['notename'] }}</h4>
+                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div class="modal-body" align="left">
+                              <form action="/notes" method="post">
+                                  <div class="form-group">
+                                      <label>Note Title </label>
+                                      <input autocomplete="off" class="form-control" name="notename" placeholder="Note Title" value="{{ note['notename'] }}" type="text">
+                                  </div>
+                                  <div class="form-group">
+                                    <label>Note Text </label><br>
+                                    <textarea class="form-control" name="note" placeholder="Note Text" value="{{ note['note'] }}" rows="5" cols="35">{{ note['note'] }}</textarea>
+                                  </div>
+                                  <button class="btn btn-primary" type="submit" name="cardid" value="{{ note['noteid'] }}">Save Changes</button>
+                                  <input type="button" class="btn btn-primary" value="Cancel" data-dismiss="modal"/>
+                              </form>
+                              <br><hr color="red">
+                              <form action="/delete" method="post">
+                                <div class="form-group">
+                                  <label bold>Use the button below to delete this entry:</label>
+                                  <br>
+                                  <button align="center" class="btn btn-danger" type="submit" name="deletenote" value="{{ note['noteid'] }}">Delete entry</button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                </div>
+              </div>
+
+            </div>
+        </div>
+
+        </div>
+
+      {% endfor %}
+    </div>
+
+</div>
+
+</div>
+
+</div>
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/chanut" title="Chanut">Chanut</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
+{% endblock %}

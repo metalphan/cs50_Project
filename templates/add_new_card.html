@@ -1,0 +1,70 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Log In
+{% endblock %}
+
+{% block main %}
+
+
+    <form action="/addnewcard" method="post">
+        <div class="form-group">
+            <label>Credit/Debit/Charge Card Name </label>
+            <input autocomplete="off" class="form-control" name="cardname" placeholder="Card Name" value="{{ cardname }}" type="text">
+        </div>
+        <div class="form-group">
+            <label>Card Type </label>
+            <select name="cardtype">
+              {% for cardtype in cardtypes %}
+                <option value='{{ cardtype['cardtypeid'] }}'> {{ cardtype['cardtype'] }}</option>
+              {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Card Holder </label>
+            <input autocomplete="off" autofocus class="form-control" name="cardholder" placeholder="Cardholder Name" type="text">
+        </div>
+        <div class="form-group">
+            <label>Card Number </label>
+            <input autocomplete="off" class="form-control" id="cardnumber" name="cardnumber" placeholder="Card Number" type="password">
+            <input type="checkbox" onclick="showCardnumber()">Show Card Number
+        </div>
+        <div class="form-group">
+            <label>Expiration Date </label>
+            <input autocomplete="off" class="form-control" name="expire_date" placeholder="Expiration Date" type="month">
+        </div>
+        <div class="form-group">
+            <label>CVV </label>
+            <input autocomplete="off" class="form-control" id="cvv" name="cvv" placeholder="CVV" type="password">
+            <input type="checkbox" onclick="showCvv()">Show CVV
+        </div>
+        <div class="form-group">
+            <label>Comment </label>
+            <textarea class="form-control" name="comment" placeholder="Add a comment" rows="5" cols="50"></textarea>
+        </div>
+        <button class="btn btn-primary" type="submit">Save New</button>
+        <input type="button" class="btn btn-primary" value="Cancel" onclick="history.back()"/>
+    </form>
+
+
+        <script>
+          function showCardnumber() {
+            var x = document.getElementById("cardnumber");
+            if (x.type === "password") {
+              x.type = "text";
+            } else {
+              x.type = "password";
+            }
+          }
+
+          function showCvv() {
+            var x = document.getElementById("cvv");
+            if (x.type === "password") {
+              x.type = "text";
+            } else {
+              x.type = "password";
+            }
+          }
+          </script>
+
+{% endblock %}
